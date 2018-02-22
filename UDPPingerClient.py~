@@ -1,0 +1,44 @@
+# UDP Pinger
+
+from socket import *
+import time
+import select
+
+TIMEOUT_SECONDS = 1
+BUFFER_SIZE = 1024
+
+serverName = 'localhost'
+serverPort = 12000
+
+
+#create socket
+# AF_INET -- refers to IP Addr
+try:
+    clientSocket = socket(socket.AF_INET, socket.SOCK_DGRAM)
+except OSError as err:
+    print(err)
+    clientSocket.close()
+    clientSocket = None
+    sys.exit(1)
+
+message = "ping"
+isTimeout = False
+for x in range(0, 10):
+	start = time.time()
+	clientSocket.sendto(message, (serverName, serverPort)
+	#sets timeout time to one second	
+	socket.settimeout(TIMEOUT_SECONDS)
+	try: 
+		modMessage, serverAddr = clientSocket.recvfrom(BUFFER_SIZE)
+	except OSError as err:
+		print("Timeout occurred, message lost.")
+		isTimeout = True
+	stop = time.time()
+	if (!isTimeout):
+		print(modMessage)
+		print(str((stop - start)*1000 + "milliseconds"))
+	
+clientSocket.close()
+
+
+
